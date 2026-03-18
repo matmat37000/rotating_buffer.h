@@ -19,3 +19,18 @@ int main() {
     add(&buf, i);
 }
 ```
+
+> [!NOTE]
+> This library use `malloc` to allocated memory for the buffer !
+
+> [!IMPORTANT]
+> To free the buffer, call `free_rotating_buffer` on it.
+> ```c
+> // Create the object
+> rotating_buffer *buf = malloc(sizeof(rotating_buffer));
+> init_rotating_buffer(buf, 10);
+>
+> // Call it beffor the free-ing the pointer
+> free_rotating_buffer(buf);  // Free allocated memory by the buffer
+> free(buf); // Free allocated memory for the object
+> ```
