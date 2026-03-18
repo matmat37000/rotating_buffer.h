@@ -34,3 +34,6 @@ int main() {
 > free_rotating_buffer(buf);  // Free allocated memory by the buffer
 > free(buf); // Free allocated memory for the object
 > ```
+
+---
+This project is licensed under the [GNU Lesser General Public License](https://www.gnu.org/licenses/lgpl-3.0.html).
