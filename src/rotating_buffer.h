@@ -18,7 +18,6 @@
  ****************************************************************************/
 
 /* DECLARATION */
-
 #ifndef MATHIOL_ROTATING_BUFFER_H_
 #define MATHIOL_ROTATING_BUFFER_H_
 
@@ -70,8 +69,9 @@ void rotating_buffer_add(rotating_buffer *buf, int element);
  */
 int* rotating_buffer_get(const rotating_buffer *buf, int pos);
 
-/* IMPLEMENTATION */
+#endif // MATHIOL_ROTATING_BUFFER_H_
 
+/* IMPLEMENTATION */
 #if defined(LIB_ROTATING_BUFFER_IMPLEMENTATION) || defined(__CLION_IDE__) || defined(__INTELLISENSE__)
 
 #include <stdlib.h>
@@ -132,4 +132,3 @@ inline int* rotating_buffer_get(const rotating_buffer *buf, const int pos) {
 }
 
 #endif // LIB_ROTATING_BUFFER_IMPLEMENTATION
-#endif // MATHIOL_ROTATING_BUFFER_H_
