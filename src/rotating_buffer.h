@@ -1,5 +1,7 @@
 /****************************************************************************
- *  
+ *  rotating_buffer.h
+ *  BORDIER-AUPY Mathieu
+ *
  *  This program is free software: you can redistribute it and/or modify it
  *  under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or (at 
@@ -20,11 +22,7 @@
 #ifndef MATHIOL_ROTATING_BUFFER_H_
 #define MATHIOL_ROTATING_BUFFER_H_
 
-#include <stdlib.h>
-
-/** 
- * A rotating buffer
- */
+/** A rotating buffer */
 typedef struct {
   int size;
   int allocated_size;
@@ -36,62 +34,68 @@ typedef struct {
 /**
  * Initialise a buffer struct, call malloc for the memory
  *
- * @param buf Adresse of the buffer to initialise
+ * @param buf Address of the buffer to initialise
  * @param size Size of the buffer
  */
-void init_rotating_buffer(rotating_buffer *buf, int size);
+void rotating_buffer_init(rotating_buffer *buf, int size);
 
 /** 
- * Create a buffer object, and use init_rotating_buffer 
+ * Create a buffer object, and use rotating_buffer_init
+ *
  * @param size Size of the buffer
  */
-rotating_buffer create_rotating_buffer(int size);
+rotating_buffer rotating_buffer_create(int size);
 
 /**
  * Free the allocated memory inside the struct, 
  * doesn't free the struct pointer
- * @param buf Adresse of the buffer to free the content
+ *
+ * @param buf Address of the buffer to free the content
  */
-void free_rotating_buffer(rotating_buffer *buf);
+void rotating_buffer_free(rotating_buffer *buf);
 
 /**
  * Add an element to the buffer
- * @param buf Adresse of the buffer to modify
+ *
+ * @param buf Address of the buffer to modify
  * @param element the element to add
  */
-void add(rotating_buffer *buf, int element);
+void rotating_buffer_add(rotating_buffer *buf, int element);
 
 /**
  * Get an element of the buffer
+ *
+ * @param buf Address of the buffer to get the element of
  * @param pos The index of the element
  */
-int* get(rotating_buffer *buf, int pos);
-
-#endif
+int* rotating_buffer_get(const rotating_buffer *buf, int pos);
 
 /* IMPLEMENTATION */
 
-#ifdef LIBROTATING_BUFFER_IMPLEMENTATION
+#if defined(LIB_ROTATING_BUFFER_IMPLEMENTATION) || defined(__CLION_IDE__) || defined(__INTELLISENSE__)
 
-inline void init_rotating_buffer(rotating_buffer *buf, int size) {
+#include <stdlib.h>
+
+inline void rotating_buffer_init(rotating_buffer *buf, const int size) {
   buf->size = 0;
   buf->allocated_size = size + 1;
   buf->raw = (int*)malloc(sizeof(int) * buf->allocated_size);
   buf->start_ptr = buf->end_ptr = &buf->raw[0];
 }
 
-inline rotating_buffer create_rotating_buffer(int size) {
+inline rotating_buffer rotating_buffer_create(const int size) {
   rotating_buffer buf;
-  init_rotating_buffer(&buf, size);
+  rotating_buffer_init(&buf, size);
   return buf;
 }
 
-inline void free_rotating_buffer(rotating_buffer *buf) {
+inline void rotating_buffer_free(rotating_buffer *buf) {
   free(buf->raw);
-  buf->raw = buf->start_ptr = buf->end_ptr = nullptr;
+  buf->allocated_size = buf->size = 0;
+  buf->raw = buf->start_ptr = buf->end_ptr = NULL;
 }
 
-void add(rotating_buffer *buf, int element) {
+void rotating_buffer_add(rotating_buffer *buf, const int element) {
   // Move by one the end_ptr
   buf->end_ptr++;
   // Clamp it
@@ -115,9 +119,9 @@ void add(rotating_buffer *buf, int element) {
   }
 }
 
-inline int* get(rotating_buffer *buf, int pos) {
+inline int* rotating_buffer_get(const rotating_buffer *buf, const int pos) {
   int *ptr = buf->start_ptr + pos;
-  int *max = buf->raw + (buf->allocated_size - 1);
+  const int *max = buf->raw + (buf->allocated_size - 1);
   // Clamp the pointer back to the start
   // with the difference of passed cell from the max
   if (ptr > max) {
@@ -127,4 +131,5 @@ inline int* get(rotating_buffer *buf, int pos) {
   return ptr;
 }
 
-#endif
+#endif // LIB_ROTATING_BUFFER_IMPLEMENTATION
+#endif // MATHIOL_ROTATING_BUFFER_H_
